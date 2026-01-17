@@ -1,37 +1,40 @@
+import React from 'react';
+import './AgentList.css';
 import { useEffect, useState } from "react";
 import api from "../api/axios";
 
-function AgentList({ onSelect }) {
+function AgentList({ onSelect , agent }) {
   const [agents, setAgents] = useState([]);
-  const [name, setName] = useState("");
-  const [systemPrompt, setSystemPrompt] = useState("");
+  const [agentName, setName] = useState("");
+  const [prompt, setSystemPrompt] = useState("");
   const [tone, setTone] = useState("professional");
   const [error, setError] = useState("");
 
   const fetchAgents = async () => {
     try {
       const res = await api.get("/agents");
-      setAgents(res.data);
+      setAgents(res.data.data);
+      console.log(res.data.data);
     } catch {
       setError("Failed to load agents");
     }
   };
 
   useEffect(() => {
-    fetchAgents();
+    fetchAgents()
   }, []);
 
   const createAgent = async (e) => {
     e.preventDefault();
     setError("");
 
-    if (!name || !systemPrompt) {
+    if (!agentName || !prompt) {
       setError("Name and prompt are required");
       return;
     }
 
     try {
-      await api.post("/agents", { name, systemPrompt, tone });
+      await api.post("/agents", { agentName, prompt, tone });
       setName("");
       setSystemPrompt("");
       setTone("professional");
@@ -42,42 +45,44 @@ function AgentList({ onSelect }) {
   };
 
   return (
-    <div style={{ width: 260, borderRight: "1px solid #ddd", padding: 10 }}>
+    <div className='agent-list'>
       <h4>Agents</h4>
 
       {agents.map((a) => (
         <div
-          key={a._id}
-          style={{ cursor: "pointer", padding: "6px 0" }}
-          onClick={() => onSelect(a)}
-        >
-          {a.name}
-        </div>
+      key={a._id}
+      className={`agent-item ${agent?._id === a._id ? "active" : ""}`}
+      onClick={() => onSelect(a)}
+    >
+      🤖 {a.agentName} 
+    </div>
       ))}
 
       <hr />
 
       <h4>Create Agent</h4>
+      <div className='agent-form'>
       <form onSubmit={createAgent}>
         <input
-          placeholder="Agent name"
-          value={name}
+          placeholder="Agent-Name"
+          value={agentName}
           onChange={(e) => setName(e.target.value)}
         />
         <textarea
-          placeholder="System prompt"
-          value={systemPrompt}
+          placeholder="SystemPrompt"
+          value={prompt}
           onChange={(e) => setSystemPrompt(e.target.value)}
         />
         <select value={tone} onChange={(e) => setTone(e.target.value)}>
           <option value="professional">Professional</option>
           <option value="friendly">Friendly</option>
-          <option value="strict">Strict</option>
+          <option value="candid">Candid</option>
         </select>
 
         {error && <p style={{ color: "red" }}>{error}</p>}
         <button type="submit">Create</button>
       </form>
+      </div>
     </div>
   );
 }

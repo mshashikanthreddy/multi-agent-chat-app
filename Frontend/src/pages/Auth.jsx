@@ -1,5 +1,7 @@
+import React from 'react';
 import { useState } from "react";
 import api from "../api/axios";
+import './Auth.css';
 
 function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -30,7 +32,9 @@ function Auth() {
 
     try {
       const url = isLogin ? "/auth/login" : "/auth/signup";
-      const payload = { emailId, password };
+      const signupPayload = { name ,emailId, password };
+      const loginPayload = {emailId , password};
+      const payload = isLogin ? loginPayload : signupPayload ;
 
       const res = await api.post(url, payload);
 
@@ -40,34 +44,57 @@ function Auth() {
       // redirect
       window.location.href = "/dashboard";
     } catch (err) {
-      setError(err.response?.data?.error || "Authentication failed");
+      setError(err.response?.data?.error || "Invalid Credentials");
+      setPassword("");
+      setConfirmPassword("");
+      setEmailId("");
+      setName("");
     }
+
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: "80px auto" }}>
-      <h2>{isLogin ? "Login" : "Sign Up"}</h2>
+    <div className="auth-page">
+  <div className="auth-card">
+    <h2>{isLogin ? "Login" : "Create account"}</h2>
+    <p className="auth-subtitle">
+      {isLogin
+        ? "Sign in to continue"
+        : "Create an account to get started"}
+    </p>
 
-      <form onSubmit={handleSubmit}>
+      <form className="auth-form" onSubmit={handleSubmit}>
+        {!isLogin && (
         <input
           type="text"
-          placeholder="name"
+          placeholder="Name"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => {
+            setName(e.target.value);
+            setError("");
+            }
+          }
         />
+        )}
         
         <input
           type="email"
           placeholder="Email"
           value={emailId}
-          onChange={(e) => setEmailId(e.target.value)}
+          onChange={(e) => {
+            setEmailId(e.target.value);
+            setError("");
+          }}
         />
 
         <input
           type="password"
           placeholder="Password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            setError("");
+        }}
         />
 
         {!isLogin && (
@@ -75,23 +102,28 @@ function Auth() {
             type="password"
             placeholder="Confirm Password"
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            onChange={(e) => {
+              setConfirmPassword(e.target.value)
+              setError("");
+            }
+          }
           />
         )}
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && <p className="auth-error" >{error}</p>}
 
         <button type="submit">
           {isLogin ? "Login" : "Create Account"}
         </button>
       </form>
 
-      <p style={{ marginTop: 10 }}>
+      <p className='auth-footer'>
         {isLogin ? "No account?" : "Already have an account?"}{" "}
         <button onClick={() => setIsLogin(!isLogin)}>
           {isLogin ? "Sign up" : "Login"}
         </button>
       </p>
+    </div>
     </div>
   );
 }

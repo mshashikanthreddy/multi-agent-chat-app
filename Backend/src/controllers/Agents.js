@@ -42,13 +42,13 @@ const getAllAgents = async(req,res) => {
 
     try{
 
-        const agents = await Agent.find({
+        const data = await Agent.find({
             userId : userId
         })
         
         res.status(200).json({
             message : "All agents related to user",
-            agents
+            data
         })
     }
     catch(err){

@@ -1,5 +1,7 @@
+import React from 'react';
 import { useEffect, useRef, useState } from "react";
 import api from "../api/axios";
+import './ChatWindow.css';
 
 function ChatWindow({ agent }) {
   const [messages, setMessages] = useState([]);
@@ -7,19 +9,22 @@ function ChatWindow({ agent }) {
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Reset chat when agent changes
-  useEffect(() => {
-    setMessages([]);
-  }, [agent]);
 
-  // Auto-scroll to bottom
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, loading]);
+  if (!agent) return;
 
-  if (!agent) {
-    return <div style={{ flex: 1, padding: 10 }}>Select an agent to start chat</div>;
-  }
+  const loadHistory = async () => {
+    try {
+      const res = await api.get(`/agents/${agent._id}/messages`);
+      setMessages(res.data.data|| []);
+    } catch {
+      setMessages([]);
+    }
+  };
+
+  loadHistory();
+}, [agent?._id]); 
+
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -47,47 +52,39 @@ function ChatWindow({ agent }) {
   };
 
   return (
-    <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: 10 }}>
-      <h4>Chat with {agent.name}</h4>
+    <div className='chat-window'>
+      {!agent ? (
+    <div className="chat-window">
+      <div className="chat-header">
+        <h4>Select an agent to start chatting</h4>
+      </div>
+    </div>
+  ) : (
+    <>
+      <div className='chat-header'>
+      <h4>Chat with 🤖 {agent.agentName}</h4>
+      </div>
 
-      {/* Messages */}
-      <div
-        style={{
-          flex: 1,
-          overflowY: "auto",
-          border: "1px solid #ddd",
-          padding: 10,
-          marginBottom: 10
-        }}
-      >
-        {messages.map((m, i) => (
+      <div className="chat-messages">
+        {messages.map((msg, index) => (
           <div
-            key={i}
-            style={{
-              textAlign: m.role === "user" ? "right" : "left",
-              margin: "6px 0"
-            }}
+            key={index}
+            className={`chat-message ${msg.role}`}
           >
-            <span
-              style={{
-                display: "inline-block",
-                padding: "6px 10px",
-                borderRadius: 6,
-                background: m.role === "user" ? "#d1e7dd" : "#f1f1f1"
-              }}
-            >
-              {m.content}
-            </span>
+            {msg.content}
           </div>
         ))}
-        {loading && <p>Typing…</p>}
+
+        {loading && (
+          <div className="chat-message assistant">
+            Typing…
+          </div>
+        )}
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input */}
-      <div style={{ display: "flex", gap: 8 }}>
+      <div className="chat-input">
         <input
-          style={{ flex: 1 }}
           placeholder="Type a message"
           value={input}
           onChange={(e) => setInput(e.target.value)}
@@ -97,9 +94,9 @@ function ChatWindow({ agent }) {
           Send
         </button>
       </div>
+    </>)}
     </div>
-  );
-}
+)}
 
 export default ChatWindow;
 

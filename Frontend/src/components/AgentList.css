@@ -1,0 +1,73 @@
+.agent-list {
+  width: 260px;
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.agent-list h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #374151;
+}
+
+.agent-item {
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  border-radius: 8px;
+  background: #f3f4f6;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.agent-item:hover {
+  background: #e0e7ff;
+  transform: scale(1.03);
+}
+
+.agent-item.active {
+  background: #c7d2fe;
+  font-weight: 500;
+}
+
+.agent-form {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.agent-form input,
+.agent-form textarea,
+.agent-form select {
+  width: 80%;
+  margin-bottom: 8px;
+  padding: 8px 10px;
+  font-size: 13px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+}
+
+.agent-form textarea {
+  min-height: 70px;
+  min-width: 30px;
+  resize: vertical;
+}
+
+.agent-form button {
+  width: 80%;
+  padding: 8px;
+  font-size: 13px;
+  background: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.agent-form button:hover {
+  background: #4338ca;
+}

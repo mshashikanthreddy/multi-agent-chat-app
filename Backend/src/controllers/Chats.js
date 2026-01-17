@@ -51,8 +51,6 @@ const chatWithLLM = async (req,res) => {
             role: "user",
             content: message
         })
-
-        console.log(messages);
         
     const llmResponse = await axios.post(
         "https://openrouter.ai/api/v1/chat/completions",
@@ -72,7 +70,6 @@ const chatWithLLM = async (req,res) => {
     );
 
     const reply = llmResponse.data.choices[0].message.content;
-    console.log(reply);
 
     await Chat.create([
         { agentId, role: "user", content: message },
@@ -92,6 +89,38 @@ const chatWithLLM = async (req,res) => {
 };
 
 
+const getChatMessages = async (req, res) => {
+  try {
+    const { agentId } = req.params;
+    const userId = req.user._id;
+
+    const agent = await Agent.findOne({
+      _id: agentId,
+      userId
+    });
+
+    if (!agent) {
+      return res.status(404).json({
+        error: "Agent not found"
+      });
+    }
+
+    const messages = await Chat.find({ agentId })
+      .sort({ createdAt: 1 }) // oldest → newest
+      .select("role content createdAt");
+
+    res.status(200).json({
+      message: "Chat history fetched successfully",
+      data: messages
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: "Failed to fetch chat history"
+    });
+  }
+};
+
 module.exports = {
-    chatWithLLM 
+    chatWithLLM,
+    getChatMessages
 };

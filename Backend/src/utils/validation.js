@@ -5,7 +5,6 @@ const validateUserOnSignup = (data) => {
     
     const {name , emailId, password} = data;
     
-    console.log(emailId.includes('@gmail.com'));
     if(!name){
         throw new Error('please fill the mandatory details')
     } 

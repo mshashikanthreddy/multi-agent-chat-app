@@ -1,16 +1,18 @@
+import React from 'react';
 import { useState } from "react";
 import Header from "../components/Header";
 import AgentList from "../components/AgentList";
 import ChatWindow from "../components/ChatWindow";
+import './Dashboard.css';
 
 function Dashboard() {
   const [selectedAgent, setSelectedAgent] = useState(null);
 
   return (
-    <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
+    <div className='dashboard'>
       <Header />
-      <div style={{ flex: 1, display: "flex" }}>
-        <AgentList onSelect={setSelectedAgent} />
+      <div className='dashboard-body'>
+        <AgentList onSelect={setSelectedAgent} agent={selectedAgent} />
         <ChatWindow agent={selectedAgent} />
       </div>
     </div>
