@@ -1,13 +1,16 @@
-function Dashboard() {
-  const handleLogout = () => {
-    sessionStorage.removeItem("token");
-    window.location.href = "/";
-  };
+import Header from "../components/Header";
+import AgentList from "../components/AgentList";
+import ChatWindow from "../components/ChatWindow";
 
+function Dashboard() {
   return (
-    <div>
-      <button onClick={handleLogout}>Logout</button>
-      <h2>Dashboard</h2>
+    <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
+      <Header />
+
+      <div style={{ flex: 1, display: "flex" }}>
+        <AgentList />
+        <ChatWindow />
+      </div>
     </div>
   );
 }
