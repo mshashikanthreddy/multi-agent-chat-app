@@ -5,9 +5,11 @@ require('dotenv').config();
 
 const authRouter = require('./src/routes/auth');
 const agentRouter = require('./src/routes/agent');
+const chatRouter = require('./src/routes/chat');
 app.use(express.json());
 
 app.use('/auth', authRouter);
+app.use('/agents',chatRouter);
 app.use('/',agentRouter);
 
 
