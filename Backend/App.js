@@ -6,7 +6,17 @@ require('dotenv').config();
 const authRouter = require('./src/routes/auth');
 const agentRouter = require('./src/routes/agent');
 const chatRouter = require('./src/routes/chat');
+
 app.use(express.json());
+const cors = require("cors");
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true
+  })
+);
+
 
 app.use('/auth', authRouter);
 app.use('/agents',chatRouter);
