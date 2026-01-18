@@ -90,7 +90,33 @@ http://localhost:5173
 
 ---
 
+For deployment :
+
+I deployed the Frontend on "vercel"
+For Backend I deployed in "Render"(You sometimes expects a delay or a cold start in login/signup
+it is because render backend server automatically go to sleep mode to save unneccsary maintainance charge.
+Note: This is only for a free model not for paid model. )
+
+Here is the link of this multi-agent-chat-app :
+```
+https://multi-agent-chat-app-jet.vercel.app/
+```
+This is file you must pass on to the Frontend. so, update vite url in .env
+```env
+VITE_API_URL = https://multi-agent-chat-app-jet.vercel.app/
+```
+please unable cors for this "URL" or for all (app.use(cors());)
+
+For proper deployment setup and requiremnts you get more information from following these sites
+which i attach below or ask chatgpt,perplexity or any other AI LLM.
+```
+Frontend = https://vercel.com/docs
+Backend = https://render.com/docs/your-first-deploy
+For LLM Integration : https://openrouter.ai/models
+```
+
 ## Notes
 
 - Backend must be running for frontend to work
-- API keys must never be committed
+- API keys , Database credentials , Secret keys and other keys stored in .env must never be committed
+- .env and node_modules name should be add to .gitignore.
