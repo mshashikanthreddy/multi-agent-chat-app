@@ -1,6 +1,5 @@
 const validator = require('validator');
 
-
 const validateUserOnSignup = (data) => {
     
     const {name , emailId, password} = data;

@@ -7,7 +7,7 @@ const signupUser = async(req,res) => {
 
         validateUserOnSignup(req.body);
 
-        const {name , emailId , password,} = req.body;
+        const {name , emailId , password} = req.body;
 
        const hashPassword = await bcrypt.hash(password,10);
          const user = new User({

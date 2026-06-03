@@ -10,9 +10,7 @@ const chatRouter = require('./src/routes/chat');
 app.use(express.json());
 const cors = require("cors");
 
-app.use(
-  cors()
-);
+app.use(cors());
 
 
 app.use('/auth', authRouter);
