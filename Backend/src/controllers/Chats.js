@@ -64,7 +64,7 @@ const chatWithLLM = async (req,res) => {
             Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
             "Content-Type": "application/json",
             "HTTP-Referer": `http://localhost:${process.env.PORT}`,
-            "X-Title": "ai-agent-builder"
+            "X-Title": "ai key"
         }
         }
     );
